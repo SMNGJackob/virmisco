@@ -1,0 +1,18 @@
+.idea/
+web/composer.lock
+
+# Symlinks to XML-generating PHP scripts, needed for XML-based Intellisense
+/web/oai/templates/*.xml
+
+# generated from codegen/read-layer/
+/web/src/readlayer/entity
+/web/src/readlayer/valueobject
+
+web/vendor/
+
+# LibreOffice lock file for opened documents
+.~lock.*
+
+/web/sql/*.zip
+/web/sql/*.aof
+/web/sql/20??????.sql
