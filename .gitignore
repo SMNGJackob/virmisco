@@ -1,4 +1,8 @@
 .idea/
+
+# The event store's Redis data file
+/redis-data/appendonly.aof
+
 web/composer.lock
 
 # Symlinks to XML-generating PHP scripts, needed for XML-based Intellisense
