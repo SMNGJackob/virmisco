@@ -132,5 +132,20 @@
                 remarks: remarks
             });
         }
+
+        // helper functions (not exposed on service)
+
+        /**
+         * @param {string} dateString
+         * @returns {Date}
+         * @throws {string} when the give string does not form a valid ISO 8601 date (YYYY-MM-DD).
+         */
+        function parseIsoDateString(dateString) {
+            var matchResult = dateString.match(/^(\d{4})-(\d\d)-(\d\d)$/);
+            if (matchResult) {
+                return new Date(matchResult[1] - 0, matchResult[2] - 1, matchResult[3] - 0);
+            }
+            throw 'The given string does not describe a valid ISO 8601 date.'
+        }
     }
 })();
