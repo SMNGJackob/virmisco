@@ -84,9 +84,12 @@
          * @param {string} locationPlace
          * @param {string} remarks
          * @returns {Promise}
+         * @throws {} when any of the date arguments are invalid
          * @memberOf GatheringService#
          */
         function logGathering(id, journalNumber, samplingDateAfter, samplingDateBefore, agentPerson, agentOrganization, locationCountry, locationProvince, locationRegion, locationPlace, remarks) {
+            samplingDateAfter = parseIsoDateString(samplingDateAfter).toUTCString();
+            samplingDateBefore = parseIsoDateString(samplingDateBefore).toUTCString();
             return dataService.sendCommand('LogGathering', {
                 gatheringId: id,
                 journalNumber: journalNumber,
@@ -115,9 +118,12 @@
          * @param {string} place
          * @param {string} remarks
          * @returns {Promise}
+         * @throws {*} when any of the date arguments are invalid
          * @memberOf GatheringService#
          */
         function manipulateGathering(id, journalNumber, dateAfter, dateBefore, person, organization, country, province, region, place, remarks) {
+            dateAfter = parseIsoDateString(dateAfter).toUTCString();
+            dateBefore = parseIsoDateString(dateBefore).toUTCString();
             return dataService.sendCommand('ManipulateGathering', {
                 gatheringId: id,
                 journalNumber: journalNumber,
