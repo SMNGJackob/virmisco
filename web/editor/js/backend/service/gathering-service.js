@@ -84,9 +84,12 @@
          * @param {string} locationPlace
          * @param {string} remarks
          * @returns {Promise}
+         * @throws {} when any of the date arguments are invalid
          * @memberOf GatheringService#
          */
         function logGathering(id, journalNumber, samplingDateAfter, samplingDateBefore, agentPerson, agentOrganization, locationCountry, locationProvince, locationRegion, locationPlace, remarks) {
+            samplingDateAfter = parseIsoDateString(samplingDateAfter).toUTCString();
+            samplingDateBefore = parseIsoDateString(samplingDateBefore).toUTCString();
             return dataService.sendCommand('LogGathering', {
                 gatheringId: id,
                 journalNumber: journalNumber,
@@ -115,9 +118,12 @@
          * @param {string} place
          * @param {string} remarks
          * @returns {Promise}
+         * @throws {*} when any of the date arguments are invalid
          * @memberOf GatheringService#
          */
         function manipulateGathering(id, journalNumber, dateAfter, dateBefore, person, organization, country, province, region, place, remarks) {
+            dateAfter = parseIsoDateString(dateAfter).toUTCString();
+            dateBefore = parseIsoDateString(dateBefore).toUTCString();
             return dataService.sendCommand('ManipulateGathering', {
                 gatheringId: id,
                 journalNumber: journalNumber,
@@ -131,6 +137,21 @@
                 locationPlace: place,
                 remarks: remarks
             });
+        }
+
+        // helper functions (not exposed on service)
+
+        /**
+         * @param {string} dateString
+         * @returns {Date}
+         * @throws {string} when the give string does not form a valid ISO 8601 date (YYYY-MM-DD).
+         */
+        function parseIsoDateString(dateString) {
+            var matchResult = dateString.match(/^(\d{4})-(\d\d)-(\d\d)$/);
+            if (matchResult) {
+                return new Date(matchResult[1] - 0, matchResult[2] - 1, matchResult[3] - 0);
+            }
+            throw 'The given string does not describe a valid ISO 8601 date.'
         }
     }
 })();
