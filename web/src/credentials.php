@@ -6,10 +6,10 @@
      * @license https://creativecommons.org/publicdomain/zero/1.0/ CC0-1.0
      */
 
-    const REDIS_URI = 'tcp://127.0.0.1?database=1';
+    const REDIS_URI = 'tcp://172.17.0.1:11079?database=1';
     const REDIS_SQL_QUEUE = 'sql-queue';
-    const MARIA_DSN = 'mysql:host=127.0.0.1;dbname=dbvirmisco;charset=utf8';
-    const MARIA_USER = '##FIXME:MARIA-USERNAME##';
-    const MARIA_PASS = '##FIXME:MARIA-PASSWORD##';
+    const MARIA_DSN = 'mysql:host=172.17.0.1;port=11006;dbname=virmisco;charset=utf8';
+    const MARIA_USER = 'virmisco';
+    const MARIA_PASS = 'tp3WBbdAGqLL';
     const INDEX_URI_LAS = 'http://www.virmisco.org/media/las-file-index.txt';
     const INDEX_URI_SCAN = 'http://www.virmisco.org/media/scan-file-index.txt';

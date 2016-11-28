@@ -1,0 +1,145 @@
+docker stop vmscgit-origin-files
+docker stop vmscgit-origin-php-apache
+docker stop vmscgit-origin-mariadb
+docker stop vmscgit-origin-mariadb-contao
+docker stop vmscgit-origin-redis
+docker stop vmscgit-proxy-files
+docker stop vmscgit-proxy-php-apache
+docker stop vmscgit-proxy-mariadb
+docker stop vmscgit-proxy-mariadb-contao
+docker stop vmscgit-proxy-redis
+
+docker rm vmscgit-origin-files
+docker rm vmscgit-origin-php-apache
+docker rm vmscgit-origin-mariadb
+docker rm vmscgit-origin-mariadb-contao
+docker rm vmscgit-origin-redis
+docker rm vmscgit-proxy-files
+docker rm vmscgit-proxy-php-apache
+docker rm vmscgit-proxy-mariadb
+docker rm vmscgit-proxy-mariadb-contao
+docker rm vmscgit-proxy-redis
+
+docker run \
+    --detach \
+    --publish 11180:80 \
+    --volume /var/run/docker.sock:/var/run/docker.sock \
+    --name vmscgit-proxy-files \
+    cpuguy83/docker-grand-ambassador \
+        -name vmscgit-origin-files
+
+docker run \
+    --detach \
+    --publish 11006:3306 \
+    --volume /var/run/docker.sock:/var/run/docker.sock \
+    --name vmscgit-proxy-mariadb \
+    cpuguy83/docker-grand-ambassador \
+        -name vmscgit-origin-mariadb
+
+docker run \
+    --detach \
+    --publish 11106:3306 \
+    --volume /var/run/docker.sock:/var/run/docker.sock \
+    --name vmscgit-proxy-mariadb-contao \
+    cpuguy83/docker-grand-ambassador \
+        -name vmscgit-origin-mariadb-contao
+
+docker run \
+    --detach \
+    --publish 11080:80 \
+    --volume /var/run/docker.sock:/var/run/docker.sock \
+    --name vmscgit-proxy-php-apache \
+    cpuguy83/docker-grand-ambassador \
+        -name vmscgit-origin-php-apache
+
+docker run \
+    --detach \
+    --publish 11079:6379 \
+    --volume /var/run/docker.sock:/var/run/docker.sock \
+    --name vmscgit-proxy-redis \
+    cpuguy83/docker-grand-ambassador \
+        -name vmscgit-origin-redis
+
+docker run \
+    --detach \
+    --volume "$HOME/projects/sednasoft/senckenberg/virmisco-git/static":/var/www/html \
+    --name vmscgit-origin-files \
+    php:apache
+
+docker run \
+    --detach \
+    --env MYSQL_ROOT_PASSWORD=hW3e4iNuFDqs \
+    --env MYSQL_DATABASE=virmisco \
+    --env MYSQL_USER=virmisco \
+    --env MYSQL_PASSWORD=tp3WBbdAGqLL \
+    --name vmscgit-origin-mariadb \
+    mariadb
+
+docker run \
+    --detach \
+    --env MYSQL_ROOT_PASSWORD=hW3e4iNuFDqs \
+    --env MYSQL_DATABASE=dbcontao \
+    --env MYSQL_USER=dbcontao \
+    --env MYSQL_PASSWORD='K8?7QBKK4TAJ' \
+    --name vmscgit-origin-mariadb-contao \
+    mariadb
+
+docker run \
+    --detach \
+    --link vmscgit-proxy-files:files \
+    --link vmscgit-proxy-mariadb:mariadb \
+    --link vmscgit-proxy-mariadb-contao:contao \
+    --link vmscgit-proxy-redis:redis \
+    --volume "$HOME/projects/sednasoft/senckenberg/virmisco-git/conf/php":/usr/local/etc/php/conf.d \
+    --volume "$HOME/projects/sednasoft/senckenberg/virmisco-git/web":/var/www/html \
+    --name vmscgit-origin-php-apache \
+    aschaffhirt/php-apache-xdebug
+
+docker run \
+    --detach \
+    --volume "$HOME/projects/sednasoft/senckenberg/virmisco-git/redis-data":/data \
+    --name vmscgit-origin-redis \
+    redis redis-server --appendonly yes
+
+## Interactive command-line redis client
+# docker run --rm -it --link vmscgit-proxy-redis:redis redis redis-cli -h redis
+
+## Interactive command-line database client
+# docker run --rm -it --link vmscgit-proxy-mariadb:db mariadb  mysql -hdb -uvirmisco -ptp3WBbdAGqLL -Dvirmisco
+
+## Redirectable command-line database client
+# docker run --rm -i --link vmscgit-proxy-mariadb:db mariadb mysql -hdb -uvirmisco -ptp3WBbdAGqLL -Dvirmisco
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
