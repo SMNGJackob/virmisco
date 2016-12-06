@@ -1,6 +1,6 @@
 /**
  * @author SednaSoft A. Schaffhirt & A. Wünsche GbR <info@sedna-soft.de>
- * @version 2015-11-09
+ * @version 2016-12-06
  * @since 2015-11-02
  * @license CC0-1.0
  */
@@ -88,8 +88,8 @@
          * @memberOf GatheringService#
          */
         function logGathering(id, journalNumber, samplingDateAfter, samplingDateBefore, agentPerson, agentOrganization, locationCountry, locationProvince, locationRegion, locationPlace, remarks) {
-            samplingDateAfter = parseIsoDateString(samplingDateAfter).toUTCString();
-            samplingDateBefore = parseIsoDateString(samplingDateBefore).toUTCString();
+            samplingDateAfter = parseIsoDateString(samplingDateAfter).toISOString();
+            samplingDateBefore = parseIsoDateString(samplingDateBefore).toISOString();
             return dataService.sendCommand('LogGathering', {
                 gatheringId: id,
                 journalNumber: journalNumber,
@@ -122,8 +122,8 @@
          * @memberOf GatheringService#
          */
         function manipulateGathering(id, journalNumber, dateAfter, dateBefore, person, organization, country, province, region, place, remarks) {
-            dateAfter = parseIsoDateString(dateAfter).toUTCString();
-            dateBefore = parseIsoDateString(dateBefore).toUTCString();
+            dateAfter = parseIsoDateString(dateAfter).toISOString();
+            dateBefore = parseIsoDateString(dateBefore).toISOString();
             return dataService.sendCommand('ManipulateGathering', {
                 gatheringId: id,
                 journalNumber: journalNumber,
