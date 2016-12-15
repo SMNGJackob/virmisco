@@ -151,11 +151,22 @@
             if (dateString == '') {
                 return null;
             }
+            // detect yyyy-mm-dd
             matchResult = dateString.match(/^(\d{4})-(\d\d)-(\d\d)$/);
             if (matchResult) {
                 return new Date(matchResult[1] - 0, matchResult[2] - 1, matchResult[3] - 0);
             }
-            throw 'The given string does not describe a valid ISO 8601 date.'
+            // detect d.m.yyyy
+            matchResult = dateString.match(/^(\d\d?)\.(\d\d?)\.(\d{4})$/);
+            if (matchResult) {
+                return new Date(matchResult[3] - 0, matchResult[2] - 1, matchResult[1] - 0);
+            }
+            // detect m/d/yyyy
+            matchResult = dateString.match(/^(\d\d?)\/(\d\d?)\/(\d{4})$/);
+            if (matchResult) {
+                return new Date(matchResult[3] - 0, matchResult[1] - 1, matchResult[2] - 0);
+            }
+            throw 'The given string does not conform to a supported date format.'
         }
     }
 })();
