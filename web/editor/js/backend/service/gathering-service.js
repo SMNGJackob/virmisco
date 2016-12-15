@@ -88,13 +88,13 @@
          * @memberOf GatheringService#
          */
         function logGathering(id, journalNumber, samplingDateAfter, samplingDateBefore, agentPerson, agentOrganization, locationCountry, locationProvince, locationRegion, locationPlace, remarks) {
-            samplingDateAfter = parseIsoDateString(samplingDateAfter).toISOString();
-            samplingDateBefore = parseIsoDateString(samplingDateBefore).toISOString();
+            samplingDateAfter = parseDateString(samplingDateAfter);
+            samplingDateBefore = parseDateString(samplingDateBefore);
             return dataService.sendCommand('LogGathering', {
                 gatheringId: id,
                 journalNumber: journalNumber,
-                samplingDateAfter: samplingDateAfter,
-                samplingDateBefore: samplingDateBefore,
+                samplingDateAfter: samplingDateAfter ? samplingDateAfter.toISOString() : null,
+                samplingDateBefore: samplingDateBefore ? samplingDateBefore.toISOString() : null,
                 agentPerson: agentPerson,
                 agentOrganization: agentOrganization,
                 locationCountry: locationCountry,
@@ -122,13 +122,13 @@
          * @memberOf GatheringService#
          */
         function manipulateGathering(id, journalNumber, dateAfter, dateBefore, person, organization, country, province, region, place, remarks) {
-            dateAfter = parseIsoDateString(dateAfter).toISOString();
-            dateBefore = parseIsoDateString(dateBefore).toISOString();
+            dateAfter = parseDateString(dateAfter);
+            dateBefore = parseDateString(dateBefore);
             return dataService.sendCommand('ManipulateGathering', {
                 gatheringId: id,
                 journalNumber: journalNumber,
-                samplingDateAfter: dateAfter,
-                samplingDateBefore: dateBefore,
+                samplingDateAfter: dateAfter ? dateAfter.toISOString() : null,
+                samplingDateBefore: dateBefore ? dateBefore.toISOString() : null,
                 agentPerson: person,
                 agentOrganization: organization,
                 locationCountry: country,
@@ -143,15 +143,30 @@
 
         /**
          * @param {string} dateString
-         * @returns {Date}
+         * @returns {Date|null}
          * @throws {string} when the give string does not form a valid ISO 8601 date (YYYY-MM-DD).
          */
-        function parseIsoDateString(dateString) {
-            var matchResult = dateString.match(/^(\d{4})-(\d\d)-(\d\d)$/);
+        function parseDateString(dateString) {
+            var matchResult;
+            if (dateString == '') {
+                return null;
+            }
+            // detect yyyy-mm-dd
+            matchResult = dateString.match(/^(\d{4})-(\d\d)-(\d\d)$/);
             if (matchResult) {
                 return new Date(matchResult[1] - 0, matchResult[2] - 1, matchResult[3] - 0);
             }
-            throw 'The given string does not describe a valid ISO 8601 date.'
+            // detect d.m.yyyy
+            matchResult = dateString.match(/^(\d\d?)\.(\d\d?)\.(\d{4})$/);
+            if (matchResult) {
+                return new Date(matchResult[3] - 0, matchResult[2] - 1, matchResult[1] - 0);
+            }
+            // detect m/d/yyyy
+            matchResult = dateString.match(/^(\d\d?)\/(\d\d?)\/(\d{4})$/);
+            if (matchResult) {
+                return new Date(matchResult[3] - 0, matchResult[1] - 1, matchResult[2] - 0);
+            }
+            throw 'The given string does not conform to a supported date format.'
         }
     }
 })();
